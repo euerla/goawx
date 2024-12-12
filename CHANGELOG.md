@@ -1,3 +1,10 @@
+# [0.22.0](https://github.com/denouche/goawx/compare/v0.21.1...v0.22.0) (2024-12-12)
+
+
+### Features
+
+* add workflow jobs ([#35](https://github.com/denouche/goawx/issues/35)) ([7d9dbe6](https://github.com/denouche/goawx/commit/7d9dbe61ed46159a089f1a565764b5692b6f2ca5)), closes [#33](https://github.com/denouche/goawx/issues/33)
+
 ## [0.21.1](https://github.com/denouche/goawx/compare/v0.21.0...v0.21.1) (2024-05-31)
 
 
