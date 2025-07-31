@@ -470,7 +470,7 @@ type JobLaunch struct {
 	AskInventoryOnLaunch    bool              `json:"ask_inventory_on_launch"`
 	AskCredentialOnLaunch   bool              `json:"ask_credential_on_launch"`
 	AllowSimultaneous       bool              `json:"allow_simultaneous"`
-	Artifacts               map[string]string `json:"artifacts"`
+	Artifacts               map[string]interface{} `json:"artifacts"`
 	ScmRevision             string            `json:"scm_revision"`
 	InstanceGroup           interface{}       `json:"instance_group"`
 	DiffMode                bool              `json:"diff_mode"`
@@ -529,7 +529,7 @@ type Job struct {
 	AskInventoryOnLaunch    bool              `json:"ask_inventory_on_launch"`
 	AskCredentialOnLaunch   bool              `json:"ask_credential_on_launch"`
 	AllowSimultaneous       bool              `json:"allow_simultaneous"`
-	Artifacts               map[string]string `json:"artifacts"`
+	Artifacts               map[string]interface{} `json:"artifacts"`
 	ScmRevision             string            `json:"scm_revision"`
 	InstanceGroup           int               `json:"instance_group"`
 	DiffMode                bool              `json:"diff_mode"`
