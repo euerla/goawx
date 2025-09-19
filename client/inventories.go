@@ -132,3 +132,19 @@ func (i *InventoriesService) DeleteInventory(id int) (*Inventory, error) {
 
 	return result, nil
 }
+
+// GetHostsByInventoryID list hosts for a specific inventory
+func (i *InventoriesService) GetHostsByInventoryID(id int, params map[string]string) (*InventoryHosts, error) {
+	result := new(InventoryHosts)
+	endpoint := fmt.Sprintf("%s%d/hosts/", inventoriesAPIEndpoint, id)
+	resp, err := i.client.Requester.GetJSON(endpoint, result, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := CheckResponse(resp); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}

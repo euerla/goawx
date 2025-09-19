@@ -280,6 +280,12 @@ type Inventory struct {
 	PendingDeletion              bool        `json:"pending_deletion"`
 }
 
+// InventoryHosts represents a paginated list of hosts associated with an inventory.
+type InventoryHosts struct {
+	Pagination
+	Results []*Host `json:"results"`
+}
+
 // Credential represents the awx api credential.
 type Credential struct {
 	Description      string                 `json:"description"`

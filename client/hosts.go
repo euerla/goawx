@@ -176,3 +176,17 @@ func (h *HostService) DeleteHost(id int) (*Host, error) {
 
 	return result, nil
 }
+
+// GetVariablesAsMap returns the variables as a map
+func (h *Host) GetVariablesAsMap() map[string]interface{} {
+	if h.Variables == "" {
+		return nil
+	}
+
+	var variables map[string]interface{}
+	if err := json.Unmarshal([]byte(h.Variables), &variables); err != nil {
+		return nil
+	}
+
+	return variables
+}
