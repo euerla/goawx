@@ -1,59 +1,53 @@
+version: "2"
 linters:
-  disable-all: true
+  default: none
   enable:
+    - asciicheck
     - bodyclose
-    - deadcode
     - depguard
     - dogsled
-    #- errcheck
     - funlen
     - gochecknoinits
+    - gocognit
     - goconst
-    #- gocritic
     - gocyclo
-    - gofmt
-    - goimports
-    - golint
-    #- gomnd
     - goprintffuncname
     - gosec
-    - gosimple
     - govet
     - ineffassign
-    - interfacer
-    #- lll
     - misspell
     - nakedret
     - nolintlint
+    - prealloc
     - rowserrcheck
-    #- scopelint
     - staticcheck
-    - structcheck
-    #- stylecheck
-    - typecheck
     - unconvert
     - unparam
     - unused
-    - varcheck
     - whitespace
-    - asciicheck
-    #- gochecknoglobals
-    - gocognit
-    #- godot
-    #- godox
-    #- maligned
-    - prealloc
-    #- testpackage
-    #- wsl
-    # don't enable:
-    #- nestif
-    #- dupl
-    #- goerr113
-issues:
-  # Excluding configuration per-path, per-linter, per-text and per-source
-  exclude-rules:
-    # Exclude some linters from running on tests files.
-    - path: _test\.go
-      linters:
-        - gochecknoglobals
-        - gochecknoinits
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - gochecknoglobals
+          - gochecknoinits
+        path: _test\.go
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
