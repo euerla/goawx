@@ -5,6 +5,16 @@ import (
 	"net/http"
 )
 
+// AWXError represents an error from the AWX API, including the HTTP status code.
+type AWXError struct {
+	StatusCode int
+	Message    string
+}
+
+func (e *AWXError) Error() string {
+	return e.Message
+}
+
 // This variable is mandatory and to be populated for creating services API
 var mandatoryFields []string
 
@@ -45,6 +55,10 @@ type AWX struct {
 	WorkflowJobTemplateNodeFailureService           *WorkflowJobTemplateNodeStepService
 	WorkflowJobTemplateNodeSuccessService           *WorkflowJobTemplateNodeStepService
 	WorkflowJobTemplateNotificationTemplatesService *WorkflowJobTemplateNotificationTemplatesService
+	WorkflowJobNodeService                          *WorkflowJobNodeService
+	InventoryUpdatesService                         *InventoryUpdatesService
+	SystemJobsService                               *SystemJobsService
+	WorkflowApprovalsService                        *WorkflowApprovalsService
 }
 
 // Client implement http client.
@@ -59,7 +73,10 @@ func CheckResponse(resp *http.Response) error {
 		return nil
 	}
 
-	return fmt.Errorf("responsed with %d, resp: %v", resp.StatusCode, resp)
+	return &AWXError{
+		StatusCode: resp.StatusCode,
+		Message:    fmt.Sprintf("responsed with %d, resp: %v", resp.StatusCode, resp),
+	}
 }
 
 // ValidateParams is to validate the input to use the services.
@@ -224,6 +241,18 @@ func newAWX(c *Client) *AWX {
 			client:   c,
 		},
 		WorkflowJobTemplateNotificationTemplatesService: &WorkflowJobTemplateNotificationTemplatesService{
+			client: c,
+		},
+		WorkflowJobNodeService: &WorkflowJobNodeService{
+			client: c,
+		},
+		InventoryUpdatesService: &InventoryUpdatesService{
+			client: c,
+		},
+		SystemJobsService: &SystemJobsService{
+			client: c,
+		},
+		WorkflowApprovalsService: &WorkflowApprovalsService{
 			client: c,
 		},
 	}

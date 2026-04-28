@@ -194,6 +194,7 @@ type Summary struct {
 	ObjectRoles                 *ObjectRoles                 `json:"object_roles"`
 	UserCapabilities            *UserCapabilities            `json:"user_capabilities"`
 	Project                     *Project                     `json:"project"`
+	Job                         *Job                         `json:"job"`
 	LastJob                     map[string]interface{}       `json:"last_job"`
 	CurrentJob                  map[string]interface{}       `json:"current_job"`
 	LastUpdate                  map[string]interface{}       `json:"last_update"`
@@ -951,6 +952,35 @@ type WorkflowJobTemplateNode struct {
 	AlwaysNodes            []int     `json:"always_nodes"`
 	AllParentsMustConverge bool      `json:"all_parents_must_converge"`
 	Identifier             string    `json:"identifier"`
+}
+
+type WorkflowJobNode struct {
+	ID                      int       `json:"id"`
+	Type                    string    `json:"type"`
+	URL                     string    `json:"url"`
+	Related                 *Related  `json:"related"`
+	SummaryFields           *Summary  `json:"summary_fields"`
+	Created                 time.Time `json:"created"`
+	Modified                time.Time `json:"modified"`
+	ExtraData               string    `json:"extra_data"`
+	Inventory               int       `json:"inventory"`
+	ScmBranch               string    `json:"scm_branch"`
+	JobType                 string    `json:"job_type"`
+	JobTags                 string    `json:"job_tags"`
+	SkipTags                string    `json:"skip_tags"`
+	Limit                   string    `json:"limit"`
+	DiffMode                string    `json:"diff_mode"`
+	Verbosity               int       `json:"verbosity"`
+	WorkflowJob             int       `json:"workflow_job"`
+	WorkflowJobTemplateNode int       `json:"workflow_job_template_node"`
+	UnifiedJobTemplate      int       `json:"unified_job_template"`
+	SuccessNodes            []int     `json:"success_nodes"`
+	FailureNodes            []int     `json:"failure_nodes"`
+	AlwaysNodes             []int     `json:"always_nodes"`
+	AllParentsMustConverge  bool      `json:"all_parents_must_converge"`
+	Identifier              string    `json:"identifier"`
+	DoNotRun                bool      `json:"do_not_run"`
+	Job                     int       `json:"job"`
 }
 
 type Schedule struct {
