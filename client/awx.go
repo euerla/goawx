@@ -1,13 +1,17 @@
 package awx
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"net/http"
+	"strings"
 )
 
 // AWXError represents an error from the AWX API, including the HTTP status code.
 type AWXError struct {
 	StatusCode int
+	Body       string
 	Message    string
 }
 
@@ -69,13 +73,31 @@ type Client struct {
 
 // CheckResponse do http response check, and return err if not in [200, 300).
 func CheckResponse(resp *http.Response) error {
+    if resp == nil {
+		return fmt.Errorf("response is nil")
+	}
+
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		return nil
 	}
 
+	bodyStr := ""
+	if resp.Body != nil {
+		bodyBytes, err := io.ReadAll(resp.Body)
+		if err == nil {
+			bodyStr = strings.TrimSpace(string(bodyBytes))
+			// Reset the body if it's still needed elsewhere
+			resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+		}
+	}
+
+	// A clean error message without headers or cookie information
+	msg := fmt.Sprintf("AWX API responded with HTTP %d (%s): %s", resp.StatusCode, resp.Status, bodyStr)
+
 	return &AWXError{
 		StatusCode: resp.StatusCode,
-		Message:    fmt.Sprintf("responsed with %d, resp: %v", resp.StatusCode, resp),
+		Body:       bodyStr,
+		Message:    msg,
 	}
 }
 
