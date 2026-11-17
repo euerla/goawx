@@ -18,18 +18,19 @@ var (
 
 	awxClient *AWX
 
-	credentialsServiceTestTable = []*TestRow{{
-		data: map[string]interface{}{
-			"credential_type": 5,
-			"inputs": map[string]interface{}{
-				"username": "badusername",
-				"password": "badpassword",
+	credentialsServiceTestTable = []*TestRow{
+		{
+			data: map[string]interface{}{
+				"credential_type": 5,
+				"inputs": map[string]interface{}{
+					"username": "badusername",
+					"password": "badpassword",
+				},
+				"name":         "credential_01",
+				"organization": 1,
 			},
-			"name":         "credential_01",
-			"organization": 1,
+			params: map[string]string{},
 		},
-		params: map[string]string{},
-	},
 	}
 )
 

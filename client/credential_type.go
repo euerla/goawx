@@ -18,7 +18,8 @@ type ListCredentialTypeResponse struct {
 const credentialTypesAPIEndpoint = "/api/v2/credential_types/"
 
 func (cs *CredentialTypeService) ListCredentialTypes(params map[string]string) ([]*CredentialType,
-	*ListCredentialTypeResponse, error) {
+	*ListCredentialTypeResponse, error,
+) {
 	result := new(ListCredentialTypeResponse)
 	resp, err := cs.client.Requester.GetJSON(credentialTypesAPIEndpoint, result, params)
 	if err != nil {

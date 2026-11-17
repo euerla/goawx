@@ -181,8 +181,22 @@ type UserCapabilities struct {
 
 // Labels represents the awx api labels.
 type Labels struct {
-	Count   int           `json:"count"`
-	Results []interface{} `json:"results"`
+	Count   int      `json:"count"`
+	Results []*Label `json:"results"`
+}
+
+// Label represents an awx label.
+type Label struct {
+	ID            int       `json:"id"`
+	Type          string    `json:"type"`
+	URL           string    `json:"url"`
+	Related       *Related  `json:"related"`
+	SummaryFields *Summary  `json:"summary_fields"`
+	Created       time.Time `json:"created"`
+	Modified      time.Time `json:"modified"`
+	Name          string    `json:"name"`
+	Description   string    `json:"description"`
+	Organization  int       `json:"organization"`
 }
 
 // Summary represents the awx api summary fields.
@@ -349,12 +363,50 @@ type Groups struct {
 	Results []Result `json:"results"`
 }
 
-// Instance represents the awx api instance.
+// Instance represents the awx api instance. It covers both the minimal
+// representation returned by /api/v2/ping/ and the full representation
+// returned by /api/v2/instances/.
 type Instance struct {
+	ID                       int        `json:"id"`
+	Hostname                 string     `json:"hostname"`
+	Type                     string     `json:"type"`
+	URL                      string     `json:"url"`
+	Related                  *Related   `json:"related"`
+	SummaryFields            *Summary   `json:"summary_fields"`
+	UUID                     string     `json:"uuid"`
+	Created                  time.Time  `json:"created"`
+	Modified                 time.Time  `json:"modified"`
+	LastSeen                 time.Time  `json:"last_seen"`
+	HealthCheckStarted       *time.Time `json:"health_check_started"`
+	HealthCheckPending       bool       `json:"health_check_pending"`
+	LastHealthCheck          *time.Time `json:"last_health_check"`
+	Errors                   string     `json:"errors"`
+	CapacityAdjustment       string     `json:"capacity_adjustment"`
+	Version                  string     `json:"version"`
+	Capacity                 int        `json:"capacity"`
+	ConsumedCapacity         int        `json:"consumed_capacity"`
+	PercentCapacityRemaining float64    `json:"percent_capacity_remaining"`
+	JobsRunning              int        `json:"jobs_running"`
+	JobsTotal                int        `json:"jobs_total"`
+	CPU                      string     `json:"cpu"`
+	Memory                   int64      `json:"memory"`
+	CPUCapacity              int        `json:"cpu_capacity"`
+	MemCapacity              int        `json:"mem_capacity"`
+	Enabled                  bool       `json:"enabled"`
+	ManagedByPolicy          bool       `json:"managed_by_policy"`
+	NodeType                 string     `json:"node_type"`
+	NodeState                string     `json:"node_state"`
+	Managed                  bool       `json:"managed"`
+	IPAddress                string     `json:"ip_address"`
+	Peers                    []int      `json:"peers"`
+	ReversePeers             []int      `json:"reverse_peers"`
+	ListenerPort             *int       `json:"listener_port"`
+	PeersFromControlNodes    bool       `json:"peers_from_control_nodes"`
+	Protocol                 string     `json:"protocol"`
+
+	// Fields of the legacy /api/v2/ping/ representation.
 	Node      string    `json:"node"`
 	Heartbeat time.Time `json:"heartbeat"`
-	Version   string    `json:"version"`
-	Capacity  int       `json:"capacity"`
 }
 
 // Ping represents the awx api ping.
@@ -535,6 +587,7 @@ type Job struct {
 	AskVerbosityOnLaunch    bool                   `json:"ask_verbosity_on_launch"`
 	AskInventoryOnLaunch    bool                   `json:"ask_inventory_on_launch"`
 	AskCredentialOnLaunch   bool                   `json:"ask_credential_on_launch"`
+	AskLabelsOnLaunch       bool                   `json:"ask_labels_on_launch"`
 	AllowSimultaneous       bool                   `json:"allow_simultaneous"`
 	Artifacts               map[string]interface{} `json:"artifacts"`
 	ScmRevision             string                 `json:"scm_revision"`
@@ -846,6 +899,7 @@ type WorkflowJobTemplate struct {
 	AskInventoryOnLaunch bool        `json:"ask_inventory_on_launch"`
 	AskScmBranchOnLaunch bool        `json:"ask_scm_branch_on_launch"`
 	AskLimitOnLaunch     bool        `json:"ask_limit_on_launch"`
+	AskLabelsOnLaunch    bool        `json:"ask_labels_on_launch"`
 	WebhookService       string      `json:"webhook_service"`
 	WebhookCredential    interface{} `json:"webhook_credential"`
 }

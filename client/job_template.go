@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 )
 
 // JobTemplateService implements awx job template apis.
@@ -75,6 +76,56 @@ func (jt *JobTemplateService) Launch(id int, data map[string]interface{}, params
 	}
 
 	return result, nil
+}
+
+const jobTemplateLabelsAPIEndpoint = "/api/v2/job_templates/%d/labels/"
+
+// LaunchWithLabels launches a job template and applies the given label IDs to the launch data.
+// If label IDs are provided, it verifies that labels are allowed on launch for the template.
+// It returns the launched job details or an error.
+func (jt *JobTemplateService) LaunchWithLabels(id int, data map[string]interface{}, labelIDs []int, params map[string]string) (*JobLaunch, error) {
+	if len(labelIDs) > 0 {
+		template, err := jt.GetJobTemplateByID(id, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := EnsureLabelsAllowed(template.AskLabelsOnLaunch, labelIDs); err != nil {
+			return nil, err
+		}
+	}
+
+	return jt.Launch(id, LaunchDataWithLabels(data, labelIDs), params)
+}
+
+// ListJobTemplatesByLabel lists job templates associated with the given label ID.
+// It passes params to the list request and returns the matching templates, the list response,
+// and any request error.
+func (jt *JobTemplateService) ListJobTemplatesByLabel(labelID int, params map[string]string) ([]*JobTemplate, *ListJobTemplatesResponse, error) {
+	return jt.ListJobTemplates(withQuery(params, "labels", strconv.Itoa(labelID)))
+}
+
+// ListJobTemplatesByLabelName lists job templates associated with the label name.
+// It forwards name and params to the list request and returns templates, response, and error.
+func (jt *JobTemplateService) ListJobTemplatesByLabelName(name string, params map[string]string) ([]*JobTemplate, *ListJobTemplatesResponse, error) {
+	return jt.ListJobTemplates(withQuery(params, "labels__name", name))
+}
+
+// ListLabelsForJobTemplate returns labels for a job template, the list response, and any error.
+func (jt *JobTemplateService) ListLabelsForJobTemplate(id int, params map[string]string) ([]*Label, *ListLabelsResponse, error) {
+	result := new(ListLabelsResponse)
+	endpoint := fmt.Sprintf(jobTemplateLabelsAPIEndpoint, id)
+
+	resp, err := jt.client.Requester.GetJSON(endpoint, result, params)
+	if err != nil {
+		return nil, result, err
+	}
+
+	if err := CheckResponse(resp); err != nil {
+		return nil, result, err
+	}
+
+	return result.Results, result, nil
 }
 
 // CreateJobTemplate creates a job template

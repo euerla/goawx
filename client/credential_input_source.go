@@ -19,7 +19,8 @@ const credentialInputSourceAPIEndpoint = "/api/v2/credential_input_sources/"
 
 func (cs *CredentialInputSourceService) ListCredentialInputSources(params map[string]string) ([]*CredentialInputSource,
 	*ListCredentialInputSourceResponse,
-	error) {
+	error,
+) {
 	result := new(ListCredentialInputSourceResponse)
 	resp, err := cs.client.Requester.GetJSON(credentialInputSourceAPIEndpoint, result, params)
 	if err != nil {
@@ -71,7 +72,8 @@ func (cs *CredentialInputSourceService) GetCredentialInputSourceByID(id int, par
 }
 
 func (cs *CredentialInputSourceService) UpdateCredentialInputSourceByID(id int, data map[string]interface{},
-	params map[string]string) (*CredentialInputSource, error) {
+	params map[string]string,
+) (*CredentialInputSource, error) {
 	result := new(CredentialInputSource)
 	endpoint := fmt.Sprintf("%s%d", credentialInputSourceAPIEndpoint, id)
 

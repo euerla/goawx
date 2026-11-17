@@ -103,7 +103,8 @@ func (cs *CredentialsService) GetCredentialsByID(id int, params map[string]strin
 }
 
 func (cs *CredentialsService) UpdateCredentialsByID(id int, data map[string]interface{},
-	params map[string]string) (*Credential, error) {
+	params map[string]string,
+) (*Credential, error) {
 	result := new(Credential)
 	endpoint := fmt.Sprintf("%s%d", credentialsAPIEndpoint, id)
 

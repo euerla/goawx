@@ -28,7 +28,7 @@ func (ar *APIRequest) SetHeader(key string, value string) *APIRequest {
 
 // NewAPIRequest news an APIRequest object.
 func NewAPIRequest(method string, endpoint string, payload io.Reader) *APIRequest {
-	var headers = http.Header{}
+	headers := http.Header{}
 	var suffix string
 	ar := &APIRequest{method, endpoint, payload, headers, suffix}
 	return ar

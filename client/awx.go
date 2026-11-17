@@ -63,6 +63,8 @@ type AWX struct {
 	InventoryUpdatesService                         *InventoryUpdatesService
 	SystemJobsService                               *SystemJobsService
 	WorkflowApprovalsService                        *WorkflowApprovalsService
+	LabelService                                    *LabelService
+	InstancesService                                *InstancesService
 }
 
 // Client implement http client.
@@ -73,7 +75,7 @@ type Client struct {
 
 // CheckResponse do http response check, and return err if not in [200, 300).
 func CheckResponse(resp *http.Response) error {
-    if resp == nil {
+	if resp == nil {
 		return fmt.Errorf("response is nil")
 	}
 
@@ -275,6 +277,12 @@ func newAWX(c *Client) *AWX {
 			client: c,
 		},
 		WorkflowApprovalsService: &WorkflowApprovalsService{
+			client: c,
+		},
+		LabelService: &LabelService{
+			client: c,
+		},
+		InstancesService: &InstancesService{
 			client: c,
 		},
 	}
